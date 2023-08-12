@@ -1,0 +1,4 @@
+<resources>
+    <string name="TodoApp">Your App Name</string>
+    <string name="notification">notification_sound</string>
+</resources>
