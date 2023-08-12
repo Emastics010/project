@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:work/loginPage.dart';
 
 void main() {
   runApp(const TodoApp());
@@ -15,9 +16,32 @@ class TodoApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(title: const Text('Schedule List')),
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Schedule List'),
+          actions: const [
+            CircleAvatar(
+              radius: 20,
+              backgroundImage: AssetImage('assets/iconimage.jpg'),
+            ),
+            SizedBox(width: 16),
+          ],
+        ),
+        drawer: Drawer(
+          child: Center(
+            child: TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
+              },
+              child: const Text("Sign out"),
+            ),
+          ),
+        ),
         body: const TodoScreen(),
-        
       ),
     );
   }
@@ -51,15 +75,16 @@ class _TodoScreenState extends State<TodoScreen> {
   void initState() {
     super.initState();
 
-    var initializationSettingsAndroid = const AndroidInitializationSettings('app_icon');
-   // var initializationSettingsIOS = const IOSInitializationSettings();
+    var initializationSettingsAndroid =
+        const AndroidInitializationSettings('app_icon');
+    // var initializationSettingsIOS = const IOSInitializationSettings();
     var initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
-     // iOS: initializationSettingsIOS,
+      // iOS: initializationSettingsIOS,
     );
     flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-     // onSelectNotification: _onSelectNotification,
+      // onSelectNotification: _onSelectNotification,
     );
   }
 
@@ -71,15 +96,16 @@ class _TodoScreenState extends State<TodoScreen> {
     var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
       'channel_id',
       'channel_name',
-     // 'channel_description',
+      // 'channel_description',
       importance: Importance.max,
       priority: Priority.high,
       showWhen: false,
-      sound: RawResourceAndroidNotificationSound('notification_sound'), // Set the custom sound
+      sound: RawResourceAndroidNotificationSound(
+          'notification_sound'), // Set the custom sound
     );
 
     //var iOSPlatformChannelSpecifics = const IOSNotificationDetails(
-      //sound: 'notification_sound.aiff', // Set the custom sound
+    //sound: 'notification_sound.aiff', // Set the custom sound
     //);
 
     var platformChannelSpecifics = NotificationDetails(
@@ -110,7 +136,8 @@ class _TodoScreenState extends State<TodoScreen> {
         importance: Importance.max,
         priority: Priority.high,
         showWhen: false,
-        sound: RawResourceAndroidNotificationSound('notification'), // Set the custom sound
+        sound: RawResourceAndroidNotificationSound(
+            'notification'), // Set the custom sound
       );
 
       //var iOSPlatformChannelSpecifics = const IOSNotificationDetails(
@@ -119,7 +146,7 @@ class _TodoScreenState extends State<TodoScreen> {
 
       var platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics,
-     //   iOS: iOSPlatformChannelSpecifics,
+        //   iOS: iOSPlatformChannelSpecifics,
       );
 
       await flutterLocalNotificationsPlugin.zonedSchedule(
@@ -129,7 +156,8 @@ class _TodoScreenState extends State<TodoScreen> {
         scheduledNotificationDateTime,
         platformChannelSpecifics,
         androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
       );
     }
   }
@@ -140,13 +168,16 @@ class _TodoScreenState extends State<TodoScreen> {
         todoItems.add(
           TodoItem(
             title: textEditingController.text,
-            dueDate: selectedDate.add(Duration(hours: selectedTime.hour, minutes: selectedTime.minute)),
+            dueDate: selectedDate.add(Duration(
+                hours: selectedTime.hour, minutes: selectedTime.minute)),
           ),
         );
         textEditingController.clear();
 
-        _showNotification('Todo Reminder', 'Time to complete "${todoItems.last.title}"');
-        _scheduleNotification(todoItems.last); // Schedule notification for the new todo
+        _showNotification(
+            'Todo Reminder', 'Time to complete "${todoItems.last.title}"');
+        _scheduleNotification(
+            todoItems.last); // Schedule notification for the new todo
       });
     }
   }
@@ -188,20 +219,18 @@ class _TodoScreenState extends State<TodoScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  // Add your action here when the IconButton is pressed
-                },
-                icon: const Icon(Icons.menu),
-              ),
-              const CircleAvatar(
-                radius: 20,
-                backgroundImage: NetworkImage('assets/iconimage.jpg'),
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     IconButton(
+          //       onPressed: () {},
+          //       icon: const Icon(Icons.menu),
+          //     ),
+          //     const CircleAvatar(
+          //       radius: 20,
+          //       backgroundImage: NetworkImage('assets/iconimage.jpg'),
+          //     ),
+          //   ],
+          // ),
           Container(
             margin: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -239,7 +268,8 @@ class _TodoScreenState extends State<TodoScreen> {
                         children: [
                           Text(todoItems[index].title),
                           if (todoItems[index].dueDate != null)
-                            Text('Due: ${DateFormat('MMM dd, yyyy HH:mm').format(todoItems[index].dueDate!)}'),
+                            Text(
+                                'Due: ${DateFormat('MMM dd, yyyy HH:mm').format(todoItems[index].dueDate!)}'),
                         ],
                       ),
                     ),

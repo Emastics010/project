@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:work/loginPage.dart'; // Make sure to import the correct path for LoginPage
 
 class WelcomePage extends StatefulWidget {
+  const WelcomePage({super.key});
+
   @override
   _WelcomePageState createState() => _WelcomePageState();
 }
@@ -20,7 +22,7 @@ class _WelcomePageState extends State<WelcomePage>
     );
 
     _offsetAnimation = Tween<Offset>(
-      begin: Offset(0.0, 0.5),
+      begin: const Offset(0.0, 0.5),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _controller,
@@ -28,7 +30,7 @@ class _WelcomePageState extends State<WelcomePage>
     ));
 
     // Start the animation after a delay
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       _controller.forward();
     });
   }
@@ -67,11 +69,11 @@ class _WelcomePageState extends State<WelcomePage>
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: 20), // Add spacing
+                const SizedBox(height: 20), // Add spacing
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Spacer(), // Add spacer to push arrow to the right
+                    const Spacer(), // Add spacer to push arrow to the right
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -81,7 +83,7 @@ class _WelcomePageState extends State<WelcomePage>
                           ),
                         );
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_forward,
                         size: 40,
                         color: Colors.white,

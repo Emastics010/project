@@ -2,16 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:work/homePage.dart'; // Make sure to import the correct path for HomePage
 import 'package:work/signUp.dart'; // Import the path for SignUpPage
 
-class LoginApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LoginPage(),
-    );
-  }
-}
-
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -40,16 +33,16 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login Page')),
+      appBar: AppBar(title: const Text('Login Page')),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Username',
                   prefixIcon: Icon(Icons.person),
                 ),
@@ -63,10 +56,10 @@ class _LoginPageState extends State<LoginPage> {
                   _username = value;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   prefixIcon: Icon(Icons.lock),
                 ),
@@ -80,12 +73,12 @@ class _LoginPageState extends State<LoginPage> {
                   _password = value;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: Text('Login'),
+                child: const Text('Login'),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextButton(
                 onPressed: () {
                   // Navigate to the sign-up page when clicked
@@ -96,7 +89,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   );
                 },
-                child: Text("Don't have an account? Click here to sign up"),
+                child:
+                    const Text("Don't have an account? Click here to sign up"),
               ),
             ],
           ),
