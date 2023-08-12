@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:work/loginPage.dart'; // Make sure to import the correct path for LoginPage
+import 'package:work/login_page.dart'; // Make sure to import the correct path for LoginPage
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
 
   @override
-  _WelcomePageState createState() => _WelcomePageState();
+  State<WelcomePage> createState() => _WelcomePageState();
 }
 
 class _WelcomePageState extends State<WelcomePage>
@@ -79,7 +79,7 @@ class _WelcomePageState extends State<WelcomePage>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => LoginPage(),
+                            builder: (context) => const LoginPage(),
                           ),
                         );
                       },

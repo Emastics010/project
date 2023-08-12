@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:work/loginPage.dart';
-
-void main() {
-  runApp(const TodoApp());
-}
+import 'package:work/login_page.dart';
 
 class TodoApp extends StatelessWidget {
   const TodoApp({Key? key}) : super(key: key);

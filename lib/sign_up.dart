@@ -1,25 +1,46 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:work/homePage.dart';
+import 'package:work/home_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  bool isLoading = false;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _signUp() {
-    // Implement your sign-up logic here
-    // For testing purposes, navigate to the homePage after pressing "Sign Up"
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const TodoApp()),
-    );
+  void _signUp() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      )
+          .then((value) async {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const TodoApp()),
+        );
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Invalid username or password - $e'),
+        ),
+      );
+    }
   }
 
   @override
@@ -50,10 +71,12 @@ class _SignUpPageState extends State<SignUpPage> {
               decoration: const InputDecoration(labelText: 'Password'),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _signUp,
-              child: const Text('Sign Up'),
-            ),
+            isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: _signUp,
+                    child: const Text('Sign Up'),
+                  ),
           ],
         ),
       ),

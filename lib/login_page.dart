@@ -1,32 +1,48 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:work/homePage.dart'; // Make sure to import the correct path for HomePage
-import 'package:work/signUp.dart'; // Import the path for SignUpPage
+import 'package:work/home_page.dart';
+import 'package:work/sign_up.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  // ignore: unused_field
-  String? _username;
-  // ignore: unused_field
-  String? _password;
+  bool isLoading = false;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  void _submitForm() {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // Perform login logic here
-
-      // Assuming HomePage is the name of the page you want to navigate to.
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const TodoApp(),
-        ),
-      );
+      setState(() {
+        isLoading = true;
+      });
+      try {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        )
+            .then((value) async {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const TodoApp()),
+          );
+        });
+      } catch (e) {
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Invalid username or password - $e'),
+          ),
+        );
+      }
     }
   }
 
@@ -42,22 +58,21 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
+                controller: _emailController,
                 decoration: const InputDecoration(
-                  labelText: 'Username',
+                  labelText: 'Email address',
                   prefixIcon: Icon(Icons.person),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your username';
+                    return 'Please enter your email';
                   }
                   return null;
-                },
-                onSaved: (value) {
-                  _username = value;
                 },
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _passwordController,
                 obscureText: true,
                 decoration: const InputDecoration(
                   labelText: 'Password',
@@ -69,15 +84,14 @@ class _LoginPageState extends State<LoginPage> {
                   }
                   return null;
                 },
-                onSaved: (value) {
-                  _password = value;
-                },
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: const Text('Login'),
-              ),
+              isLoading
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: _submitForm,
+                      child: const Text('Login'),
+                    ),
               const SizedBox(height: 20),
               TextButton(
                 onPressed: () {
