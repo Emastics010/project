@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 20),
               isLoading
-                  ? const CircularProgressIndicator()
+                  ? const Center(child: CircularProgressIndicator())
                   : ElevatedButton(
                       onPressed: _submitForm,
                       child: const Text('Login'),
